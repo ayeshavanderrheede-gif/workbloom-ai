@@ -12,7 +12,7 @@ import {
 } from "@/components/shared";
 
 export const Route = createFileRoute("/planner")({
-  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s.starter === "string" ? s.starter : undefined }),
+  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s["starter"] === "string" ? s["starter"] : undefined }),
   head: () => ({
     meta: [
       { title: "Task Planner — WorkBloom AI" },
@@ -76,7 +76,7 @@ function PlannerPage() {
     const v = validatePlanner(input);
     setErrors(v);
     if (Object.keys(v).length) {
-      const first = Object.keys(v)[0];
+      const first = Object.keys(v)[0] ?? "";
       document.getElementById(first === "tasks" ? "task-name-0" : first)?.focus();
       return;
     }
@@ -129,11 +129,11 @@ function PlannerPage() {
                 ))}
               </div>
             </fieldset>
-            <Field id="dates" label={input.mode === "daily" ? "Planning date" : "Date range"} required error={errors.dates}>
-              <input id="dates" className={inputCls} placeholder={input.mode === "daily" ? "e.g. Monday 3 Nov" : "e.g. 3–7 Nov"} value={input.dates} onChange={(e) => set("dates", e.target.value)} aria-invalid={!!errors.dates} />
+            <Field id="dates" label={input.mode === "daily" ? "Planning date" : "Date range"} required error={errors["dates"]}>
+              <input id="dates" className={inputCls} placeholder={input.mode === "daily" ? "e.g. Monday 3 Nov" : "e.g. 3–7 Nov"} value={input.dates} onChange={(e) => set("dates", e.target.value)} aria-invalid={!!errors["dates"]} />
             </Field>
-            <Field id="hours" label="Available working hours" required error={errors.hours}>
-              <input id="hours" className={inputCls} placeholder="e.g. 09:00 – 17:00" value={input.hours} onChange={(e) => set("hours", e.target.value)} aria-invalid={!!errors.hours} />
+            <Field id="hours" label="Available working hours" required error={errors["hours"]}>
+              <input id="hours" className={inputCls} placeholder="e.g. 09:00 – 17:00" value={input.hours} onChange={(e) => set("hours", e.target.value)} aria-invalid={!!errors["hours"]} />
             </Field>
           </div>
           <Field id="commitments" label="Existing commitments and breaks" hint="One per line, with times, e.g. Lunch 12:30–13:15">
@@ -142,7 +142,7 @@ function PlannerPage() {
 
           <fieldset className="space-y-3">
             <legend className="text-sm font-semibold">Tasks <span className="text-primary">*</span></legend>
-            {errors.tasks && <p className="text-sm font-medium text-destructive">{errors.tasks}</p>}
+            {errors["tasks"] && <p className="text-sm font-medium text-destructive">{errors["tasks"]}</p>}
             {input.tasks.map((t, i) => (
               <div key={i} className="grid gap-2 rounded-xl border border-border bg-background p-3 sm:grid-cols-[2fr_1fr_1fr_1fr_auto] sm:items-start">
                 <div>

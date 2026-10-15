@@ -16,7 +16,7 @@ export async function runStructured<T>(opts: {
   input: string;
   schema: Record<string, unknown>;
 }): Promise<T> {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env['LOVABLE_API_KEY'];
   if (!apiKey) throw new AiError("AI is not configured yet. The AI key is missing on the server.");
 
   const res = await fetch(GATEWAY, {

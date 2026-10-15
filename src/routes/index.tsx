@@ -42,7 +42,7 @@ function Index() {
         <h2 id="tools-h" className="sr-only">Tools</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {tools.map(({ to, title, text, icon: Icon }) => (
-            <Link key={to} to={to} className="card-soft group p-5 transition-shadow hover:shadow-lift">
+            <Link key={to} to={to} search={{ starter: undefined }} className="card-soft group p-5 transition-shadow hover:shadow-lift">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sage text-sage-foreground">
                 <Icon className="h-5 w-5" aria-hidden />
               </span>

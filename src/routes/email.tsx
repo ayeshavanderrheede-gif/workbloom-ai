@@ -12,7 +12,7 @@ import {
 } from "@/components/shared";
 
 export const Route = createFileRoute("/email")({
-  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s.starter === "string" ? s.starter : undefined }),
+  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s["starter"] === "string" ? s["starter"] : undefined }),
   head: () => ({
     meta: [
       { title: "Email Writer — WorkBloom AI" },
@@ -60,7 +60,7 @@ function EmailPage() {
     const v = validateEmail(input);
     setErrors(v);
     if (Object.keys(v).length) {
-      document.getElementById(Object.keys(v)[0])?.focus();
+      document.getElementById(Object.keys(v)[0] ?? "")?.focus();
       return;
     }
     if (!confirmReplace(edited)) return;
@@ -116,7 +116,7 @@ function EmailPage() {
             <Field id="recipientName" label="Recipient name">
               <input id="recipientName" className={inputCls} value={input.recipientName} onChange={(e) => set("recipientName", e.target.value)} />
             </Field>
-            <Field id="relationship" label="Recipient relationship" required error={errors.relationship}>
+            <Field id="relationship" label="Recipient relationship" required error={errors["relationship"]}>
               <select id="relationship" className={inputCls} value={input.relationship} onChange={(e) => set("relationship", e.target.value as EmailInput["relationship"])} {...err("relationship")}>
                 <option value="">Choose…</option>
                 <option value="manager">Manager</option>
@@ -126,13 +126,13 @@ function EmailPage() {
               </select>
             </Field>
           </div>
-          <Field id="purpose" label="Purpose of the email" required error={errors.purpose} hint="e.g. Ask for feedback on my report">
+          <Field id="purpose" label="Purpose of the email" required error={errors["purpose"]} hint="e.g. Ask for feedback on my report">
             <input id="purpose" className={inputCls} value={input.purpose} onChange={(e) => set("purpose", e.target.value)} {...err("purpose")} />
           </Field>
           <Field id="details" label="Key details to include">
             <textarea id="details" rows={6} className={inputCls} value={input.details} onChange={(e) => set("details", e.target.value)} />
           </Field>
-          <fieldset className="space-y-1.5" aria-describedby={errors.tone ? "tone-error" : undefined}>
+          <fieldset className="space-y-1.5" aria-describedby={errors["tone"] ? "tone-error" : undefined}>
             <legend className="text-sm font-semibold">Tone <span className="text-primary">*</span></legend>
             <div className="flex flex-wrap gap-2">
               {(["formal", "friendly", "persuasive"] as const).map((t, i) => (
@@ -142,7 +142,7 @@ function EmailPage() {
                 </label>
               ))}
             </div>
-            {errors.tone && <p id="tone-error" className="text-sm font-medium text-destructive">{errors.tone}</p>}
+            {errors["tone"] && <p id="tone-error" className="text-sm font-medium text-destructive">{errors["tone"]}</p>}
           </fieldset>
           <Field id="senderName" label="Your name">
             <input id="senderName" className={inputCls} value={input.senderName} onChange={(e) => set("senderName", e.target.value)} />
@@ -151,7 +151,7 @@ function EmailPage() {
             <Button type="submit" disabled={loading} className="flex-1 sm:flex-none">
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />} {loading ? "Writing…" : "Generate"}
             </Button>
-            <Button type="button" variant="outline" disabled={loading} onClick={() => { setInput(emailExamples.manager); setSample(true); }}>
+            <Button type="button" variant="outline" disabled={loading} onClick={() => { setInput(emailExamples["manager"]!); setSample(true); }}>
               <FlaskConical className="h-4 w-4" /> Try an example
             </Button>
             <Button type="button" variant="ghost" disabled={loading} onClick={clearAll}>

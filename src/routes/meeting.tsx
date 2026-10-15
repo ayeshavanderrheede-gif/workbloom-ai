@@ -12,7 +12,7 @@ import {
 } from "@/components/shared";
 
 export const Route = createFileRoute("/meeting")({
-  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s.starter === "string" ? s.starter : undefined }),
+  validateSearch: (s: Record<string, unknown>) => ({ starter: typeof s["starter"] === "string" ? s["starter"] : undefined }),
   head: () => ({
     meta: [
       { title: "Meeting Notes — WorkBloom AI" },
@@ -148,8 +148,8 @@ function MeetingPage() {
           <Field id="title" label="Meeting title">
             <input id="title" className={inputCls} value={title} onChange={(e) => setTitle(e.target.value)} />
           </Field>
-          <Field id="notes" label="Meeting notes" required error={errors.notes}>
-            <textarea id="notes" rows={10} className={inputCls} value={notes} onChange={(e) => setNotes(e.target.value)} aria-invalid={!!errors.notes} aria-describedby={errors.notes ? "notes-error" : undefined} />
+          <Field id="notes" label="Meeting notes" required error={errors["notes"]}>
+            <textarea id="notes" rows={10} className={inputCls} value={notes} onChange={(e) => setNotes(e.target.value)} aria-invalid={!!errors["notes"]} aria-describedby={errors["notes"] ? "notes-error" : undefined} />
           </Field>
           <div className="flex flex-wrap gap-2">
             <Button type="submit" disabled={loading} className="flex-1 sm:flex-none">
@@ -232,7 +232,7 @@ function MeetingPage() {
                         {(["summary", "decisions", "actions"] as const).map((k) => (
                           <label key={k} className="flex items-center gap-2">
                             <input type="checkbox" checked={inc[k]} onChange={(e) => setInc({ ...inc, [k]: e.target.checked })} className="h-4 w-4 accent-primary" />
-                            {k === "actions" ? "Action items" : k[0].toUpperCase() + k.slice(1)}
+                            {k === "actions" ? "Action items" : k.charAt(0).toUpperCase() + k.slice(1)}
                           </label>
                         ))}
                       </div>
