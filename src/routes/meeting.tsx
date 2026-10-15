@@ -37,6 +37,14 @@ function toText(title: string, r: MeetingResult) {
   return `${title ? title + "\n\n" : ""}Summary\n${r.summary}\n\n${list("Key discussion points", r.keyPoints)}${list("Confirmed decisions", r.decisions)}${list("Suggestions (not confirmed)", r.suggestions)}${actions}${list("Questions to clarify", r.questions)}`.trim();
 }
 
+function ListEditor({ id, label, value, onChange }: { id: string; label: string; value: string[]; onChange: (v: string[]) => void }) {
+  return (
+    <Field id={id} label={label} hint="One item per line" required>
+      <textarea id={id} rows={Math.max(2, value.length + 1)} className={inputCls} value={lines(value)} onChange={(e) => onChange(split(e.target.value))} placeholder="None" />
+    </Field>
+  );
+}
+
 function MeetingPage() {
   const { starter } = Route.useSearch();
   const navigate = useNavigate();
@@ -130,12 +138,6 @@ function MeetingPage() {
     }
   }
 
-  const ListEditor = ({ id, label, value, onChange }: { id: string; label: string; value: string[]; onChange: (v: string[]) => void }) => (
-    <Field id={id} label={label} hint="One item per line" required>
-      <textarea id={id} rows={Math.max(2, value.length + 1)} className={inputCls} defaultValue={lines(value)} onBlur={(e) => onChange(split(e.target.value).filter((x) => x.trim()))} placeholder="None" />
-    </Field>
-  );
-
   return (
     <div>
       <PageHeader title="Meeting Notes" intro="Paste or type your notes. You'll get a summary, decisions and action items you can check and edit." />
@@ -164,7 +166,7 @@ function MeetingPage() {
             <div className="card-soft flex items-center justify-center gap-2 p-8 text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin" /> Reading your notes…</div>
           )}
           {result && (
-            <div className="card-soft space-y-5 p-5" key={JSON.stringify(result).length + (edited ? "e" : "")}>
+            <div className="card-soft space-y-5 p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-lg font-semibold">Your meeting summary</h2>
                 <div className="flex flex-wrap gap-2">
@@ -176,7 +178,7 @@ function MeetingPage() {
               </div>
               <OutputNotice />
               <Field id="o-summary" label="Summary" required>
-                <textarea id="o-summary" rows={4} className={inputCls} defaultValue={result.summary} onBlur={(e) => update({ ...result, summary: e.target.value })} />
+                <textarea id="o-summary" rows={4} className={inputCls} value={result.summary} onChange={(e) => update({ ...result, summary: e.target.value })} />
               </Field>
               <ListEditor id="o-points" label="Key discussion points" value={result.keyPoints} onChange={(v) => update({ ...result, keyPoints: v })} />
               <div className="grid gap-4 md:grid-cols-2">
@@ -196,7 +198,7 @@ function MeetingPage() {
                           <tr key={i} className="border-t border-border">
                             {(["task", "owner", "deadline"] as const).map((k) => (
                               <td key={k} className="p-1.5">
-                                <input aria-label={`${k} for action ${i + 1}`} className={inputCls + " py-1.5 text-sm"} defaultValue={a[k]} onBlur={(e) => { const items = [...result.actionItems]; items[i] = { ...a, [k]: e.target.value }; update({ ...result, actionItems: items }); }} />
+                                <input aria-label={`${k} for action ${i + 1}`} className={inputCls + " py-1.5 text-sm"} value={a[k]} onChange={(e) => { const items = [...result.actionItems]; items[i] = { ...a, [k]: e.target.value }; update({ ...result, actionItems: items }); }} />
                               </td>
                             ))}
                             <td className="p-1.5">
